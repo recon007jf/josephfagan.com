@@ -366,19 +366,19 @@
   // Sound on: switch from the silent loop to the full reel, from the start, with audio and controls
   let full=false;
   const bp=document.getElementById('bigplay');
-  bp.addEventListener('click',()=>{ bp.classList.add('gone'); if(!full){ b.click(); } });
-  b.addEventListener('click',()=>{
-    if(!full){
-      full=true; v.loop=false; v.src='video/reel-2023.mp4'; v.muted=false; v.controls=true;
-      bp.classList.add('gone'); v.play(); b.querySelector('span').textContent='Sound off'; w.setAttribute('opacity','1');
-    } else {
-      v.muted=!v.muted; b.querySelector('span').textContent=v.muted?'Sound on':'Sound off';
-      w.setAttribute('opacity',v.muted?'.35':'1');
-    }
-    b.setAttribute('aria-pressed',String(!v.muted));
-  });
-  v.addEventListener('ended',()=>{ full=false; bp.classList.remove('gone'); v.controls=false; v.src='video/home-loop.mp4'; v.muted=true; v.loop=true; v.play();
-    b.querySelector('span').textContent='Sound on'; w.setAttribute('opacity','.35'); b.setAttribute('aria-pressed','false'); });
+  // the label always says what the button will DO next
+  const sync=()=>{ const on=full && !v.muted;
+    b.querySelector('span').textContent= on ? 'Mute' : 'Sound on';
+    w.setAttribute('opacity', on ? '1' : '.35'); b.setAttribute('aria-pressed', String(on)); };
+  const startReel=()=>{ full=true; bp.classList.add('gone'); v.loop=false; v.src='video/reel-2023.mp4';
+    v.muted=false; v.volume=1; v.controls=true; v.play(); sync(); };
+  bp.addEventListener('click',startReel);
+  b.addEventListener('click',()=>{ if(!full){ startReel(); } else { v.muted=!v.muted; if(!v.muted && v.volume===0) v.volume=1; if(v.paused) v.play(); sync(); } });
+  v.addEventListener('volumechange',sync);
+  v.addEventListener('play',()=>{pz.querySelector('span').textContent='Pause';});
+  v.addEventListener('pause',()=>{pz.querySelector('span').textContent='Play';});
+  v.addEventListener('ended',()=>{ if(!full) return; full=false; bp.classList.remove('gone'); v.controls=false;
+    v.src='video/home-loop.mp4'; v.muted=true; v.loop=true; v.play(); sync(); });
 </script>
 </body>
 </html>
