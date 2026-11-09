@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joseph Fagan</title>
+<meta name="description" content="Joseph Fagan solves client problems with creative strategy, storytelling and technology. 3D and motion for Mercedes-Benz, Rivian, Audi and Meta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07080a; --line:#1b1f24; --ink:#eef1f4; --mute:#97a0aa; --dim:#5f6770; --cyan:#13c1d6;
+    --pad:clamp(16px,4.5vw,56px); --max:1240px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  img,video{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+  .mont{font-family:Montserrat,sans-serif}
+  .label{font-family:Montserrat,sans-serif;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+
+  /* top bar: name + three words, nothing else */
+  .bar{position:fixed;inset:0 0 auto 0;z-index:30;mix-blend-mode:difference}
+  .bar .wrap{max-width:none;display:flex;justify-content:space-between;align-items:center;height:64px}
+  .bar .name{font-family:Montserrat;font-weight:800;font-size:15px;letter-spacing:.12em}
+  .bar nav{display:flex;gap:26px}
+  .bar nav a{font-family:Montserrat;font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+  .bar nav a:hover{opacity:1}
+
+  /* 1. the reel IS the homepage */
+  .reel{position:relative;height:100svh;min-height:520px;background:#000;overflow:hidden}
+  .reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .reel .shade{position:absolute;inset:auto 0 0 0;height:38%;background:linear-gradient(0deg,rgba(7,8,10,.85),rgba(7,8,10,0))}
+  .reel .under{position:absolute;left:0;right:0;bottom:0;z-index:2}
+  .reel .under .wrap{max-width:none;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding-bottom:28px}
+  .reel .who{font-family:Montserrat;font-size:13px;font-weight:600;letter-spacing:.08em;color:#d7dde3}
+  .reel .who b{display:block;font-size:12px;letter-spacing:.2em;color:var(--cyan);margin-bottom:6px}
+  .sound{display:inline-flex;align-items:center;gap:10px;height:42px;padding:0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.35);backdrop-filter:blur(6px);color:var(--ink);font-family:Montserrat;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+  .sound:hover{border-color:#fff}
+  .sound svg{width:16px;height:16px}
+  .ctrls{display:flex;gap:10px}
+
+  /* 3. work: one project at a time, credited like a film */
+  .project{padding:0 0 clamp(64px,9vw,112px)}
+  .project .media{position:relative;overflow:hidden;background:#000}
+  .project .media img{width:100%;aspect-ratio:21/9;object-fit:cover}
+  .project .media.tall img{aspect-ratio:16/9}
+  .project .media video.clip{width:100%;aspect-ratio:1160/500;object-fit:cover}
+  .credits p + p{margin-top:12px}
+  .credits .client.logo{margin-bottom:12px}
+  .credits .client.logo img{height:16px;width:auto}
+  .project .media.relay{background:#0a0d10;border:1px solid var(--line)}
+  .project .media.relay svg{display:block;width:100%;height:auto}
+  .credits .src{font-size:12px;color:var(--dim);margin-top:10px}
+  .credits .src a{border-bottom:1px solid #3a4148}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1.2vw,16px)}
+  .pair img{aspect-ratio:16/10 !important}
+  .credits{display:grid;grid-template-columns:minmax(220px,1fr) 2fr;gap:24px 56px;padding-top:26px}
+  .credits h3{font-family:Montserrat;font-weight:700;font-size:clamp(20px,2vw,26px);line-height:1.2}
+  .credits .client{font-family:Montserrat;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+  .credits .role{font-size:14px;color:var(--dim);margin-top:8px}
+  .credits p{color:var(--mute);max-width:62ch}
+
+  /* text-only projects (NDA / no imagery) */
+  .ledger{border-top:1px solid var(--line);margin-bottom:clamp(64px,9vw,112px)}
+  .row{display:grid;grid-template-columns:minmax(220px,1fr) 2fr;gap:12px 56px;padding:30px 0;border-bottom:1px solid var(--line)}
+  .row h3{font-family:Montserrat;font-weight:700;font-size:20px;line-height:1.25}
+  .row .client{font-family:Montserrat;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+  .row p{color:var(--mute);max-width:62ch}
+  .row p + p{margin-top:10px}
+
+  /* 2. the message, in his own voice, right under the reel */
+  .statement{padding:clamp(64px,9vw,120px) 0 clamp(40px,6vw,72px)}
+  .statement p.lead{font-family:Montserrat;font-weight:700;font-size:clamp(26px,3.6vw,46px);line-height:1.18;letter-spacing:-.01em;max-width:22ch}
+  .statement p.lead em{font-style:normal;color:var(--cyan)}
+  .statement .body{display:grid;grid-template-columns:minmax(220px,1fr) 2fr;gap:24px 56px;margin-top:clamp(28px,4vw,48px)}
+  .statement .body p{color:var(--mute);max-width:62ch}
+  .statement .body p + p{margin-top:14px}
+  .statement ul{list-style:none;font-family:Montserrat;font-size:13px;font-weight:600;letter-spacing:.04em;color:#c3cad1;line-height:2}
+
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--line);padding:22px 0 30px}
+
+  /* personal work: just images */
+  .personal{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(8px,1.2vw,16px);margin-bottom:12px}
+  .personal img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/9}
+  .personal .wide{grid-column:1 / -1}
+  .personal .wide img{aspect-ratio:12/5}
+  .caption-line{color:var(--dim);font-size:14px;margin-bottom:clamp(64px,9vw,112px)}
+
+  /* about + contact */
+  .about{display:grid;grid-template-columns:minmax(220px,1fr) 2fr;gap:24px 56px;padding-bottom:clamp(64px,9vw,112px)}
+  .about p{color:#c3cad1;max-width:62ch}
+  .about p + p{margin-top:16px}
+  .about p.mute{color:var(--mute)}
+  .contact{border-top:1px solid var(--line);padding:clamp(56px,8vw,96px) 0 clamp(40px,6vw,64px)}
+  .contact .mail{font-family:Montserrat;font-weight:800;font-size:clamp(26px,4.6vw,58px);letter-spacing:-.01em;line-height:1.1;word-break:break-word}
+  .contact .mail:hover{color:var(--cyan)}
+  .contact .meta{display:flex;flex-wrap:wrap;gap:10px 32px;margin-top:22px;color:var(--mute);font-size:15px}
+  .contact .meta a{color:var(--ink);border-bottom:1px solid #3a4148}
+  footer{color:var(--dim);font-size:13px;padding:0 0 36px}
+
+  @media (max-width:860px){
+    .credits,.row,.about,.statement .body{grid-template-columns:1fr;gap:10px}
+    .project .media img{aspect-ratio:16/10}
+    .pair{grid-template-columns:1fr}
+    .personal{grid-template-columns:1fr}
+    .personal .wide img{aspect-ratio:16/9}
+  }
+  @media (max-width:560px){
+    .bar nav{gap:16px}
+    .bar nav a.hide-sm{display:none}
+    .reel{height:auto;min-height:0}
+    .reel video{position:relative;height:auto;aspect-ratio:16/9;object-fit:contain;margin-top:64px}
+    .reel .shade{display:none}
+    .reel .under{position:relative}
+    .reel .under .wrap{padding-top:16px;padding-bottom:8px;flex-direction:column;align-items:flex-start;gap:14px}
+    .reel .who{font-size:12px}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a href="#top" class="name">JOSEPH FAGAN</a>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#about" class="hide-sm">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- 1. Reel: first thing anyone sees, already playing -->
+  <section class="reel" aria-label="Reel">
+    <video id="reel" autoplay muted loop playsinline preload="auto" poster="img/reel-poster.jpg">
+      <source src="video/home-loop.mp4" type="video/mp4">
+    </video>
+    <div class="shade"></div>
+    <div class="under">
+      <div class="wrap">
+        <div class="who"><b>Reel</b>Joseph Fagan — Creative Strategy &amp; Direction · Co-founder &amp; CTO, Prysmata</div>
+        <div class="ctrls"><button class="sound" id="pause" aria-pressed="false"><span>Pause</span></button>
+        <button class="sound" id="sound" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4z"/><path id="wave" d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" opacity=".35"/></svg>
+          <span>Sound on</span>
+        </button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. The message: same as the resume opening -->
+  <section class="statement" aria-label="What I do">
+    <div class="wrap">
+      <p class="lead">I solve client problems with creative strategy, storytelling and <em>technology</em>.</p>
+      <div class="body">
+        <ul>
+          <li>Creative strategy &amp; storytelling</li>
+          <li>Creative &amp; art direction</li>
+          <li>Client &amp; executive advisory</li>
+          <li>AI systems &amp; automation</li>
+          <li>Team training &amp; tool adoption</li>
+          <li>Production pipelines &amp; look development</li>
+        </ul>
+        <div>
+          <p>I've led premium 3D and motion work for Mercedes-Benz, Rivian, Audi and Meta, partnering with designers, engineers and clients to turn complex ideas into work people understand.</p>
+          <p>Most recently, as co-founder and CTO of an AI startup, I turned a business problem into a working AI service, built by directing AI coding agents and launched with a pilot client.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Selected work -->
+  <section id="work">
+    <div class="wrap">
+      <div class="sec-head"><span class="label">Selected work</span></div>
+
+      <article class="project">
+        <div class="media"><img src="img/prysmata-portal.jpg" alt="Prysmata client portal, shown with example data"></div>
+        <div class="credits">
+          <div>
+            <div class="client logo"><img src="img/prysmata-logo.svg" alt="Prysmata"></div>
+            <h3>An AI prospecting service, from idea to launch</h3>
+            <div class="role">Co-founder &amp; CTO of Prysmata · Dec. 2025 – present</div>
+            <div class="src">Shown with example data</div>
+          </div>
+          <div><p>Benefits advisors miss good prospects because no one has time to watch every company for signs it needs help. I co-founded Prysmata to fix that, and spent the past year turning the problem into a working service. It spots the companies showing those signs, finds the right decision maker, researches why now is the moment, and drafts a personal email in the advisor's own voice.</p>
+          <p>I built it by directing a team of AI coding agents instead of hiring engineers. The key decision was keeping people in control: each client gets a simple portal to approve, edit or rewrite every email before it sends, and spending is capped per client. It launched with a pilot client, and the first approved emails went out on Nov. 5, 2026.</p></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="media relay">
+          <svg viewBox="0 0 1200 420" role="img" aria-label="Diagram: Claude and ChatGPT desktop apps exchange messages through a shared relay">
+            <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#13c1d6"/></marker></defs>
+            <rect x="60" y="130" width="300" height="160" rx="18" fill="#0f1317" stroke="#2a323a"/>
+            <text x="210" y="200" text-anchor="middle" fill="#eef1f4" font-family="Montserrat" font-weight="700" font-size="28">Claude</text>
+            <text x="210" y="238" text-anchor="middle" fill="#97a0aa" font-family="Inter" font-size="18">desktop app</text>
+            <rect x="840" y="130" width="300" height="160" rx="18" fill="#0f1317" stroke="#2a323a"/>
+            <text x="990" y="200" text-anchor="middle" fill="#eef1f4" font-family="Montserrat" font-weight="700" font-size="28">ChatGPT</text>
+            <text x="990" y="238" text-anchor="middle" fill="#97a0aa" font-family="Inter" font-size="18">desktop app</text>
+            <rect x="470" y="150" width="260" height="120" rx="60" fill="#0b2a2f" stroke="#13c1d6"/>
+            <text x="600" y="205" text-anchor="middle" fill="#eef1f4" font-family="Montserrat" font-weight="700" font-size="24">AI Relay</text>
+            <text x="600" y="236" text-anchor="middle" fill="#97a0aa" font-family="Inter" font-size="16">shared message log</text>
+            <path d="M365 185 H462" stroke="#13c1d6" stroke-width="3" marker-end="url(#ah)"/>
+            <path d="M735 185 H832" stroke="#13c1d6" stroke-width="3" marker-end="url(#ah)"/>
+            <path d="M832 235 H738" stroke="#5f6770" stroke-width="3" marker-end="url(#ah)"/>
+            <path d="M462 235 H368" stroke="#5f6770" stroke-width="3" marker-end="url(#ah)"/>
+            <text x="600" y="345" text-anchor="middle" fill="#5f6770" font-family="Inter" font-size="17">Each message is delivered into the right conversation on the other side, and the reply comes back.</text>
+          </svg>
+        </div>
+        <div class="credits">
+          <div>
+            <div class="client logo"><img src="img/prysmata-logo.svg" alt="Prysmata"></div>
+            <h3>AI Relay</h3>
+            <div class="role">Built for Prysmata · concept and build</div>
+          </div>
+          <div><p>Two AI desktop apps from two different companies, Claude and ChatGPT, can't normally talk to each other. I built a relay that lets them work as one team: each can hand the other a task, a question or a review, and the message lands in the right conversation on the other side without me copying and pasting.</p>
+          <p>It let one AI build while the other reviewed the work, and it ran throughout the Prysmata build.</p></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="media"><video class="clip" autoplay muted loop playsinline preload="metadata" poster="img/mbux-3d-car.jpg"><source src="video/mbux-3d-car.mp4" type="video/mp4"></video></div>
+        <div class="credits">
+          <div>
+            <div class="client">Mercedes-Benz R&amp;D</div>
+            <h3>MBUX 3D vehicle</h3>
+            <div class="role">Principal 3D Motion Designer</div>
+            <div class="src">Footage: <a href="https://www.youtube.com/watch?v=1skxqGhiBq4" target="_blank" rel="noopener">Ivan Sensei on YouTube</a></div>
+          </div>
+          <div><p>In MBUX, a 3D model of your own car is how you reach its features. Rotate it and touch a tire to see its pressure, or touch the headlights to turn them on. I worked on that 3D car and many other parts of MBUX.</p>
+          <p>The car had to look unmistakably Mercedes on every screen. I established the look-development pipeline with internal and external engineering teams and kept lighting and materials true to brand across every vehicle.</p></div>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="media"><img src="img/eq-silver-arrow.jpg" alt="Mercedes-Benz Vision EQ Silver Arrow show car"></div>
+        <div class="credits">
+          <div>
+            <div class="client">Mercedes-Benz</div>
+            <h3>Vision EQ Silver Arrow</h3>
+            <div class="role">Principal 3D Motion Designer · 2018</div>
+          </div>
+          <p>The show car needed a display drivers could read in full daylight. With the exterior design team, I engineered a rear-projection solution and designed and animated its 3D and 2D graphics.</p>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="pair">
+          <div class="media"><img src="img/eq-display.jpg" alt="EQ Silver Arrow display: virtual race between three Mercedes race cars"></div>
+          <div class="media"><img src="img/eq-cockpit.jpg" alt="Driver's view of the EQ Silver Arrow cockpit display"></div>
+        </div>
+        <div class="credits">
+          <div>
+            <div class="client">Mercedes-Benz</div>
+            <h3>EQ Silver Arrow in-car experience</h3>
+            <div class="role">3D, motion and look development</div>
+          </div>
+          <p>Telling the brand's racing story inside the car: 3D vehicles and motion built to read on a curved, rear-projected display.</p>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="media tall"><img src="img/iaa-concept-hero.jpg" alt="Mercedes-Benz Concept IAA on an instrument display"></div>
+        <div class="credits">
+          <div>
+            <div class="client">Mercedes-Benz</div>
+            <h3>Concept IAA</h3>
+            <div class="role">3D and motion</div>
+          </div>
+          <p>The Concept IAA (Intelligent Aerodynamic Automobile) show car, brought to life in 3D and motion on its instrument display.</p>
+        </div>
+      </article>
+
+      <article class="project">
+        <div class="pair">
+          <div class="media"><img src="img/f015-interior.jpg" alt="Inside the Mercedes-Benz F 015 Luxury in Motion concept"></div>
+          <div class="media"><img src="img/future-city.jpg" alt="3D future city environment at sunset"></div>
+        </div>
+        <div class="credits">
+          <div>
+            <div class="client">Mercedes-Benz</div>
+            <h3>F 015 Luxury in Motion · Future City</h3>
+            <div class="role">3D and motion</div>
+          </div>
+          <p>Imagining what autonomous luxury could feel like, and the city it might live in.</p>
+        </div>
+      </article>
+
+      <div class="ledger">
+        <div class="row">
+          <div><div class="client">Rivian</div><h3>Color, lighting &amp; art direction</h3></div>
+          <div><p>Partnered with developers and vendors to raise the lighting and color accuracy of the 3D vehicle to brand spec, and explored new art styles that steered the project's creative direction.</p></div>
+        </div>
+        <div class="row">
+          <div><div class="client">Audi Automated Driving</div><h3>Prototype vehicle visuals</h3></div>
+          <div><p>Art direction and look development for autonomous driving prototype vehicles used in user testing, working with research and software teams to bring designs into the vehicles.</p></div>
+        </div>
+        <div class="row">
+          <div><div class="client">MBH Architects</div><h3>3D pipeline advisory</h3></div>
+          <div><p>Advised the studio on its 3D process: audited the pipeline, found the efficiency gaps, recommended hardware and software, and trained the team.</p></div>
+        </div>
+      </div>
+
+      <div class="sec-head"><span class="label">Personal work</span></div>
+      <div class="personal">
+        <div class="wide"><img src="img/personal-console.jpg" alt="Personal work: sci-fi control console"></div>
+        <div><img src="img/personal-retro-room.jpg" alt="Personal work: retro computer room lit by a desk lamp"></div>
+        <div><img src="img/personal-spheres.jpg" alt="Personal work: chrome spheres on a checkerboard plane"></div>
+      </div>
+      <p class="caption-line">Light, mood and story for their own sake.</p>
+    </div>
+  </section>
+
+  <!-- 4. About -->
+  <section id="about">
+    <div class="wrap about">
+      <div class="label" style="padding-top:6px">About</div>
+      <div>
+        <p>I trained in 3D animation and visual effects and worked across advertising, feature-film VFX and games, then directed client stories for Silicon Valley tech companies. I brought that craft into the car, leading 3D, motion and look development for Mercedes-Benz, Rivian and Audi.</p>
+        <p>For the past year I've been building with AI. I co-founded Prysmata and, as CTO, turned a business problem into a working AI service. I built it by directing a team of AI coding agents rather than hiring engineers, and I built the AI Relay that let Claude and ChatGPT work on it together. It launched with a pilot client in November 2026.</p>
+        <p>That work changed where I'm headed. The same thing runs through all of it: making complex technology clear, premium and human, and getting designers, engineers and clients to agree on how. Now I bring that to AI as well as to creative work.</p>
+        <p class="mute">Today I work with a small number of clients as an independent advisor, on creative strategy and direction and on practical AI systems: finding where AI genuinely helps a team, building it, and helping people adopt it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Contact -->
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <div class="label" style="margin-bottom:18px">Contact</div>
+      <a class="mail" href="mailto:me@josephfagan.com">me@josephfagan.com</a>
+      <div class="meta">
+        <span>Based in San Jose, California. Available for creative strategy, creative direction and AI systems advisory, remote.</span>
+        <a href="https://www.linkedin.com/in/josephlfagan" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© 2026 Joseph Fagan</div></footer>
+
+<script>
+  const v=document.getElementById('reel'), b=document.getElementById('sound'), w=document.getElementById('wave');
+  const pz=document.getElementById('pause');
+  pz.addEventListener('click',()=>{
+    if(v.paused){v.play();pz.querySelector('span').textContent='Pause';pz.setAttribute('aria-pressed','false');}
+    else{v.pause();pz.querySelector('span').textContent='Play';pz.setAttribute('aria-pressed','true');}
+  });
+  // Sound on: switch from the silent loop to the full reel, from the start, with audio and controls
+  let full=false;
+  b.addEventListener('click',()=>{
+    if(!full){
+      full=true; v.loop=false; v.src='video/reel-2023.mp4'; v.muted=false; v.controls=true;
+      v.play(); b.querySelector('span').textContent='Sound off'; w.setAttribute('opacity','1');
+    } else {
+      v.muted=!v.muted; b.querySelector('span').textContent=v.muted?'Sound on':'Sound off';
+      w.setAttribute('opacity',v.muted?'.35':'1');
+    }
+    b.setAttribute('aria-pressed',String(!v.muted));
+  });
+  v.addEventListener('ended',()=>{ full=false; v.controls=false; v.src='video/home-loop.mp4'; v.muted=true; v.loop=true; v.play();
+    b.querySelector('span').textContent='Sound on'; w.setAttribute('opacity','.35'); b.setAttribute('aria-pressed','false'); });
+</script>
+</body>
+</html>
