@@ -31,8 +31,9 @@
   .bar nav a:hover{opacity:1}
 
   /* 1. the reel IS the homepage */
-  .reel{position:relative;height:100svh;min-height:520px;background:#000;overflow:hidden}
-  .reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  /* whole frame always visible: height follows the 16:9 frame, capped at the window height */
+  .reel{position:relative;height:min(100svh,56.25vw);background:#000;overflow:hidden}
+  .reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
   .reel .shade{position:absolute;inset:auto 0 0 0;height:38%;background:linear-gradient(0deg,rgba(7,8,10,.85),rgba(7,8,10,0))}
   .reel .under{position:absolute;left:0;right:0;bottom:0;z-index:2}
   .reel .under .wrap{max-width:none;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding-bottom:28px}
