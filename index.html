@@ -31,12 +31,11 @@
   .bar nav a:hover{opacity:1}
 
   /* 1. the reel IS the homepage */
-  /* whole frame always visible: height follows the 16:9 frame, capped at the window height */
-  .reel{position:relative;height:min(100svh,56.25vw);background:#000;overflow:hidden}
-  .reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-  .reel .shade{position:absolute;inset:auto 0 0 0;height:38%;background:linear-gradient(0deg,rgba(7,8,10,.85),rgba(7,8,10,0))}
-  .reel .under{position:absolute;left:0;right:0;bottom:0;z-index:2}
-  .reel .under .wrap{max-width:none;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding-bottom:28px}
+  /* reel sits below the top bar; caption + buttons sit in a strip UNDER the video, never over it */
+  .reel{background:#000;padding-top:64px}
+  .reel video{display:block;width:100%;height:auto;aspect-ratio:16/9;max-height:calc(100svh - 64px - 84px);object-fit:contain;background:#000}
+  .reel .shade{display:none}
+  .reel .under .wrap{max-width:none;display:flex;justify-content:space-between;align-items:center;gap:24px;padding-top:16px;padding-bottom:16px}
   .reel .who{font-family:Montserrat;font-size:13px;font-weight:600;letter-spacing:.08em;color:#d7dde3}
   .reel .who b{display:block;font-size:12px;letter-spacing:.2em;color:var(--cyan);margin-bottom:6px}
   .sound{display:inline-flex;align-items:center;gap:10px;height:42px;padding:0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.35);backdrop-filter:blur(6px);color:var(--ink);font-family:Montserrat;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
@@ -115,10 +114,6 @@
   @media (max-width:560px){
     .bar nav{gap:16px}
     .bar nav a.hide-sm{display:none}
-    .reel{height:auto;min-height:0}
-    .reel video{position:relative;height:auto;aspect-ratio:16/9;object-fit:contain;margin-top:64px}
-    .reel .shade{display:none}
-    .reel .under{position:relative}
     .reel .under .wrap{padding-top:16px;padding-bottom:8px;flex-direction:column;align-items:flex-start;gap:14px}
     .reel .who{font-size:12px}
     }
@@ -152,7 +147,7 @@
         <div class="ctrls"><button class="sound" id="pause" aria-pressed="false"><span>Pause</span></button>
         <button class="sound" id="sound" aria-pressed="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4z"/><path id="wave" d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12" opacity=".35"/></svg>
-          <span>Sound on</span>
+          <span>Sound off</span>
         </button></div>
       </div>
     </div>
@@ -359,9 +354,9 @@
   });
   // Sound on: switch from the silent loop to the full reel, from the start, with audio and controls
   let full=false;
-  // the label always says what the button will DO next
+  // the label shows the CURRENT state (Joseph: default reads 'Sound off')
   const sync=()=>{ const on=full && !v.muted;
-    b.querySelector('span').textContent= on ? 'Mute' : 'Sound on';
+    b.querySelector('span').textContent= on ? 'Sound on' : 'Sound off';
     w.setAttribute('opacity', on ? '1' : '.35'); b.setAttribute('aria-pressed', String(on)); };
   const startReel=()=>{ full=true; v.loop=false; v.src='video/reel-2023.mp4';
     v.muted=false; v.volume=1; v.controls=true; v.play(); sync(); };
