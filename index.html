@@ -137,8 +137,8 @@
 
   <!-- 1. Reel: first thing anyone sees, already playing -->
   <section class="reel" aria-label="Reel">
-    <video id="reel" autoplay muted loop playsinline preload="auto" poster="img/reel-poster.jpg">
-      <source src="video/home-loop.mp4" type="video/mp4">
+    <video id="reel" autoplay muted loop playsinline controls preload="auto" poster="img/reel-poster.jpg">
+      <source src="video/reel-2023.mp4#t=5.9" type="video/mp4">
     </video>
     <div class="shade"></div>
     <div class="under">
@@ -346,26 +346,18 @@
 <footer><div class="wrap">© 2026 Joseph Fagan</div></footer>
 
 <script>
+  // One video: the full reel with standard controls (play, pause, scrub, volume, full screen).
+  // It starts muted (browsers require that for autoplay) just after the old title card.
   const v=document.getElementById('reel'), b=document.getElementById('sound'), w=document.getElementById('wave');
   const pz=document.getElementById('pause');
-  pz.addEventListener('click',()=>{
-    if(v.paused){v.play();pz.querySelector('span').textContent='Pause';pz.setAttribute('aria-pressed','false');}
-    else{v.pause();pz.querySelector('span').textContent='Play';pz.setAttribute('aria-pressed','true');}
-  });
-  // Sound on: switch from the silent loop to the full reel, from the start, with audio and controls
-  let full=false;
-  // the label shows the CURRENT state (Joseph: default reads 'Sound off')
-  const sync=()=>{ const on=full && !v.muted;
+  const syncSound=()=>{ const on=!v.muted && v.volume>0;   // label shows the CURRENT state; default 'Sound off'
     b.querySelector('span').textContent= on ? 'Sound on' : 'Sound off';
     w.setAttribute('opacity', on ? '1' : '.35'); b.setAttribute('aria-pressed', String(on)); };
-  const startReel=()=>{ full=true; v.loop=false; v.src='video/reel-2023.mp4';
-    v.muted=false; v.volume=1; v.controls=true; v.play(); sync(); };
-  b.addEventListener('click',()=>{ if(!full){ startReel(); } else { v.muted=!v.muted; if(!v.muted && v.volume===0) v.volume=1; if(v.paused) v.play(); sync(); } });
-  v.addEventListener('volumechange',sync);
-  v.addEventListener('play',()=>{pz.querySelector('span').textContent='Pause';});
-  v.addEventListener('pause',()=>{pz.querySelector('span').textContent='Play';});
-  v.addEventListener('ended',()=>{ if(!full) return; full=false; v.controls=false;
-    v.src='video/home-loop.mp4'; v.muted=true; v.loop=true; v.play(); sync(); });
+  const syncPlay=()=>{ pz.querySelector('span').textContent = v.paused ? 'Play' : 'Pause'; };
+  b.addEventListener('click',()=>{ v.muted=!v.muted; if(!v.muted && v.volume===0) v.volume=1; if(v.paused) v.play(); syncSound(); });
+  pz.addEventListener('click',()=>{ v.paused ? v.play() : v.pause(); });
+  v.addEventListener('volumechange',syncSound);
+  v.addEventListener('play',syncPlay); v.addEventListener('pause',syncPlay);
 </script>
 </body>
 </html>
