@@ -43,10 +43,6 @@
   .sound:hover{border-color:#fff}
   .sound svg{width:16px;height:16px}
   .ctrls{display:flex;gap:10px}
-  .bigplay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;display:inline-flex;align-items:center;gap:14px;padding:18px 30px;border-radius:999px;border:1px solid rgba(255,255,255,.55);background:rgba(0,0,0,.45);backdrop-filter:blur(8px);color:#fff;font-family:Montserrat;font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s,border-color .2s}
-  .bigplay:hover{background:rgba(19,193,214,.25);border-color:var(--cyan)}
-  .bigplay svg{width:22px;height:22px}
-  .bigplay.gone{display:none}
 
   /* 3. work: one project at a time, credited like a film */
   .project{padding:0 0 clamp(64px,9vw,112px)}
@@ -125,8 +121,7 @@
     .reel .under{position:relative}
     .reel .under .wrap{padding-top:16px;padding-bottom:8px;flex-direction:column;align-items:flex-start;gap:14px}
     .reel .who{font-size:12px}
-    .bigplay{top:calc(64px + 28vw);padding:12px 20px;font-size:12px;gap:10px;white-space:nowrap}
-  }
+    }
 </style>
 </head>
 <body>
@@ -151,7 +146,6 @@
       <source src="video/home-loop.mp4" type="video/mp4">
     </video>
     <div class="shade"></div>
-    <button class="bigplay" id="bigplay" aria-label="Play reel with sound"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Play reel with sound</span></button>
     <div class="under">
       <div class="wrap">
         <div class="who"><b>Reel</b>Joseph Fagan — Creative Strategy &amp; Direction · Co-founder &amp; CTO, Prysmata</div>
@@ -365,19 +359,17 @@
   });
   // Sound on: switch from the silent loop to the full reel, from the start, with audio and controls
   let full=false;
-  const bp=document.getElementById('bigplay');
   // the label always says what the button will DO next
   const sync=()=>{ const on=full && !v.muted;
     b.querySelector('span').textContent= on ? 'Mute' : 'Sound on';
     w.setAttribute('opacity', on ? '1' : '.35'); b.setAttribute('aria-pressed', String(on)); };
-  const startReel=()=>{ full=true; bp.classList.add('gone'); v.loop=false; v.src='video/reel-2023.mp4';
+  const startReel=()=>{ full=true; v.loop=false; v.src='video/reel-2023.mp4';
     v.muted=false; v.volume=1; v.controls=true; v.play(); sync(); };
-  bp.addEventListener('click',startReel);
   b.addEventListener('click',()=>{ if(!full){ startReel(); } else { v.muted=!v.muted; if(!v.muted && v.volume===0) v.volume=1; if(v.paused) v.play(); sync(); } });
   v.addEventListener('volumechange',sync);
   v.addEventListener('play',()=>{pz.querySelector('span').textContent='Pause';});
   v.addEventListener('pause',()=>{pz.querySelector('span').textContent='Play';});
-  v.addEventListener('ended',()=>{ if(!full) return; full=false; bp.classList.remove('gone'); v.controls=false;
+  v.addEventListener('ended',()=>{ if(!full) return; full=false; v.controls=false;
     v.src='video/home-loop.mp4'; v.muted=true; v.loop=true; v.play(); sync(); });
 </script>
 </body>
